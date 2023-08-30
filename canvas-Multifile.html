@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation</title>
+    <script src="fabric.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+
+<body>
+    <div style="margin: 10px;" class="d-flex justify-content-center">
+        <button style="margin-right: 10px;" class="btn btn-danger" id="hop">Hóp má</button>
+        <button style="margin-left: 10px;" class="btn btn-danger" id="no">Bình thường</button>
+        <button style="margin-left: 10px;" class="btn btn-danger" id="moMieng">Mở miệng</button>
+        <button style="margin-left: 10px;" class="btn btn-danger" id="dongMieng">Đóng miệng</button>
+        <button style="margin-right: 10px;" class="btn btn-secondary" id="left">Trái</button>
+        <button style="margin-left: 10px;" class="btn btn-secondary" id="right">Phải</button>
+        <button style="margin-left: 10px;" class="btn btn-secondary" id="above">Trên</button>
+        <button style="margin-left: 10px;" class="btn btn-secondary" id="under">Dưới</button>
+        <button style="margin-left: 10px;" class="btn btn-secondary" id="rotate right">Xoay trái</button>
+        <button style="margin-left: 10px;" class="btn btn-secondary" id="rotate left">Xoay phải</button>
+    </div>
+    <canvas id="canvas" width="1500" height="650"></canvas>
+    <script type="text/javascript">
+        var canvas = new fabric.Canvas('canvas');
+        fabric.loadSVGFromURL('/default.svg', function (objects, options) {
+            var svgObject1 = fabric.util.groupSVGElements(objects, options);
+            svgObject1.set({ selectable: true });
+            // svgObject1.scale(0.5);
+            canvas.add(svgObject1);
+            svgObject1.on('selected', function (event) {
+                console.log(1)
+                var groupMat = svgObject1.getObjects()[7];
+                var bboxMat = groupMat.getBoundingRect();
+                var centerX = bboxMat.left + bboxMat.width / 2;
+                var centerY = bboxMat.top + bboxMat.height / 2;
+                groupMat.set({
+                    originX: 'center',
+                    originY: 'center',
+                    left: centerX,
+                    top: centerY
+                });
+                document.getElementById('hop').addEventListener('click', function () {
+                    groupMat.animate('scaleX', '0.9', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+                })
+                document.getElementById('no').addEventListener('click', function () {
+                    groupMat.animate('scaleX', '1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+                })
+                var groupMouth1 = svgObject1.getObjects()[38];
+                var groupMouth2 = svgObject1.getObjects()[39];
+                var groupMouth3 = svgObject1.getObjects()[40];
+
+                var bboxMoi1 = groupMouth1.getBoundingRect();
+                var centerXmoi1 = bboxMoi1.left + bboxMoi1.width / 2;
+                var centerYmoi1 = bboxMoi1.top + bboxMoi1.height / 2;
+                groupMouth1.set({
+                    originX: 'center',
+                    originY: 'center',
+                    left: centerXmoi1,
+                    top: centerYmoi1
+                });
+                document.getElementById('dongMieng').addEventListener('click', function () {
+                    groupMouth1.animate('scaleY', '0.1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+
+
+                    groupMouth2.animate('scaleY', '0.1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+
+
+                    groupMouth3.animate('scaleY', '0.1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+                })
+                document.getElementById('moMieng').addEventListener('click', function () {
+                    groupMouth1.animate('scaleY', '1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+                    groupMouth2.animate('scaleY', '1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+                    groupMouth3.animate('scaleY', '1', {
+                        onChange: canvas.renderAll.bind(canvas),
+                        duration: 1000,
+                        easing: fabric.util.ease.easeInOutQuart,
+                    });
+                })
+            });
+            // Gán sự kiện click cho đối tượng SVG
+            // svgObject1.on('mousedown', function (event) {
+            //     // Gán sự kiện click cho đối tượng SVG
+            //     console.log(1)
+            //     svgObject1.on('mousedown', function (event) {
+            //         var group = svgObject1.getObjects()[13];
+            //         var bbox = group.getBoundingRect(); // Lấy bounding box của <g>\
+
+            //         var centerX = bbox.left + bbox.width / 2;
+            //         var centerY = bbox.top + bbox.height / 2;
+
+            //         group.set({
+            //             originX: 'center',
+            //             originY: 'center',
+            //             left: centerX,
+            //             top: centerY
+            //         });
+
+            //         var targetObject = group; // Thay đổi index nếu cần thiết
+
+            //         // Tạo hiệu ứng anime.js cho đối tượng SVG
+            //         var animation = anime({
+            //             targets: targetObject,
+            //             direction: 'alternate',
+            //             loop: true,
+            //             scaleY: {
+            //                 value: 0.1,
+            //                 duration: 1000,
+            //                 easing: 'easeInOutQuart'
+            //             },
+
+            //         });
+            //         //Chỉnh sang trái
+            //         document.getElementById('left').addEventListener('click', function () {
+            //             svgObject1.animate('left', '-=100', {
+            //                 onChange: canvas.renderAll.bind(canvas),
+            //                 duration: 1000,
+            //                 easing: fabric.util.ease.easeOutBounce,
+
+            //             });
+            //         })
+            //     });
+            // });
+        })
+
+
+        fabric.loadSVGFromURL('/tiger2.svg', function (objects, options) {
+            var svgObject2 = fabric.util.groupSVGElements(objects, options);
+            svgObject2.set({ selectable: true });
+            svgObject2.scale(0.5);
+            // Gán sự kiện click cho đối tượng SVG
+            svgObject2.on('selected', function (event) {
+                // Gán sự kiện click cho đối tượng SVG
+                console.log(2)
+                svgObject2.on('mousedown', function (event) {
+                    var group = svgObject2.getObjects()[1];
+                    var bbox = group.getBoundingRect(); // Lấy bounding box của <g>\
+
+                    var centerX = bbox.left + bbox.width / 2;
+                    var centerY = bbox.top + bbox.height / 2;
+
+                    group.set({
+                        originX: 'center',
+                        originY: 'center',
+                        left: centerX,
+                        top: centerY
+                    });
+
+                    var targetObject = group; // Thay đổi index nếu cần thiết
+
+                    // Tạo hiệu ứng anime.js cho đối tượng SVG
+                    var animation = anime({
+                        targets: targetObject,
+                        direction: 'alternate',
+                        loop: true,
+                        scaleY: {
+                            value: 0.1,
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        },
+
+                    });
+                    //Chỉnh sang trái
+                    document.getElementById('left').addEventListener('click', function () {
+                        svgObject2.animate('left', '-=100', {
+                            onChange: canvas.renderAll.bind(canvas),
+                            duration: 1000,
+                            easing: fabric.util.ease.easeOutBounce,
+
+                        });
+                    })
+                });
+            });
+            canvas.add(svgObject2);
+        });
+    </script>
+</body>
+
+</html>
