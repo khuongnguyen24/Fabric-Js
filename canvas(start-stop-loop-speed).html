@@ -11,114 +11,53 @@
 
 <body>
   <div style="margin: 10px;" class="container d-flex justify-content-center">
-    <button style="margin-right: 10px;" class="btn btn-secondary" id="hop">Hóp má</button>
-    <button style="margin-left: 10px;" class="btn btn-secondary" id="no">Bình thường</button>
-    <button style="margin-left: 10px;" class="btn btn-secondary" id="moMieng">Mở miệng</button>
-    <button style="margin-left: 10px;" class="btn btn-secondary" id="dongMieng">Đóng miệng</button>
+    <button style="margin-right: 10px;" class="btn btn-secondary" id="start">Start</button>
+    <button style="margin-left: 10px;" class="btn btn-secondary" id="">Stop</button>
+    <button style="margin-left: 10px;" class="btn btn-secondary" id="">Speed</button>
+    <button style="margin-left: 10px;" class="btn btn-secondary" id="">Slow</button>
   </div>
-  <canvas id="canvas" width="1000" height="1000"></canvas>
+  <canvas class="container" id="canvas" width="1000" height="1000"></canvas>
 
   <script type="text/javascript">
     var canvas = new fabric.Canvas('canvas');
     fabric.loadSVGFromURL('/default.svg', function (objects, options) {
       var svgObject = fabric.util.groupSVGElements(objects, options);
-      svgObject.scale(0.5);
+      // svgObject.scale(0.5);
       canvas.add(svgObject);
+      // console.log(svgObject.getObjects());
 
-      var groupMat = svgObject.getObjects()[7];
-      var bboxMat = groupMat.getBoundingRect();
-      var centerX = bboxMat.left + bboxMat.width / 2;
-      var centerY = bboxMat.top + bboxMat.height / 2;
-      groupMat.set({
-        originX: 'center',
-        originY: 'center',
-        left: centerX,
-        top: centerY
+      var groupEyes1 = svgObject.getObjects()[17];
+      var groupEyes2 = svgObject.getObjects()[18];
+      var groupEyes3 = svgObject.getObjects()[19];
+      var groupEyes4 = svgObject.getObjects()[20];
+      var groupEyes5 = svgObject.getObjects()[21];
+      var groupEyes6 = svgObject.getObjects()[22];
+      var groupEyes7 = svgObject.getObjects()[23];
+      var groupEyes8 = svgObject.getObjects()[24];
+
+      var groupEyes = [groupEyes1, groupEyes2, groupEyes3, groupEyes4, groupEyes5, groupEyes6, groupEyes7, groupEyes8];
+      // Tạo một mảng chứa các đối tượng groupEyes
+      var groupEyes = [groupEyes1, groupEyes2, groupEyes3, groupEyes4, groupEyes5, groupEyes6, groupEyes7, groupEyes8];
+
+      // Tạo một hình hộp bao quanh (bounding box)
+      var boundingBox = new fabric.Rect({
+        left: groupEyes1.left, // Lấy thuộc tính left của groupEyes1
+        top: groupEyes1.top, // Lấy thuộc tính top của groupEyes1
+        width: groupEyes8.left + groupEyes8.width - groupEyes1.left, // Tính toán chiều rộng của bounding box
+        height: groupEyes8.top + groupEyes8.height - groupEyes1.top // Tính toán chiều cao của bounding box
       });
-      document.getElementById('hop').addEventListener('click', function () {
-        groupMat.animate('scaleX', '0.9', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-      })
-      document.getElementById('no').addEventListener('click', function () {
-        groupMat.animate('scaleX', '1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-      })
 
-      var groupMouth1 = svgObject.getObjects()[38];
-      var groupMouth2 = svgObject.getObjects()[39];
-      var groupMouth3 = svgObject.getObjects()[40];
-
-      var bboxMoi1 = groupMouth1.getBoundingRect();
-      var centerXmoi1 = bboxMoi1.left + bboxMoi1.width / 2;
-      var centerYmoi1 = bboxMoi1.top + bboxMoi1.height / 2;
-      groupMouth1.set({
-        originX: 'center',
-        originY: 'center',
-        left: centerXmoi1,
-        top: centerYmoi1
+      // Gộp các đối tượng groupEyes thành một nhóm
+      var eyesGroup = new fabric.Group(groupEyes, {
+        left: boundingBox.left,
+        top: boundingBox.top
       });
-      // var bboxMoi2 = groupMouth2.getBoundingRect();
-      // var centerXmoi2 = bboxMoi2.left + bboxMoi2.width / 2;
-      // var centerYmoi2 = bboxMoi2.top + bboxMoi2.height / 2;
-      // groupMouth1.set({
-      //   originX: 'center',
-      //   originY: 'center',
-      //   left: centerXmoi2,
-      //   top: centerYmoi2
-      // });
 
-      // var bboxMoi3 = groupMouth3.getBoundingRect();
-      // var centerXmoi1 = bboxMoi3.left + bboxMoi3.width / 2;
-      // var centerYmoi1 = bboxMoi3.top + bboxMoi3.height / 2;
-      // groupMouth3.set({
-      //   originX: 'center',
-      //   originY: 'center',
-      //   left: centerXmoi3,
-      //   top: centerYmoi3
-      // });
-      document.getElementById('dongMieng').addEventListener('click', function () {
-        groupMouth1.animate('scaleY', '0.1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-        groupMouth2.animate('scaleY', '0.1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-        groupMouth3.animate('scaleY', '0.1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-      })
+      // Thêm bounding box vào canvas
+      canvas.add(boundingBox);
 
-      document.getElementById('moMieng').addEventListener('click', function () {
-        groupMouth1.animate('scaleY', '1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-        groupMouth2.animate('scaleY', '1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-        groupMouth3.animate('scaleY', '1', {
-          onChange: canvas.renderAll.bind(canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeInOutQuart,
-        });
-      })
-
-    });
+      // Thêm nhóm chứa các đối tượng groupEyes vào canvas
+      canvas.add(eyesGroup);
   </script>
 </body>
 
