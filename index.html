@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+
+<body>
+
+    <button id="angle down">angle down</button>
+    <button id="angle up">angle up</button>
+    <button id="turn-left">Turn Left</button>
+    <button id="turn-right">Turn Right</button>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+    <script type="text/javascript">
+        // Khởi tạo canvas với Fabric.js
+        var canvas = new fabric.Canvas('canvas');
+
+        // Tải file SVG từ URL và tạo đối tượng Fabric.js
+        fabric.loadSVGFromURL('/default.svg', function (objects, options) {
+            console.log('obj',objects);
+            console.log('opt',options);
+            var svgObject = fabric.util.groupSVGElements(objects, options);
+            svgObject.set({ selectable: true });
+            canvas.add(svgObject);
+
+            var group = svgObject.getObjects()[13];
+
+            var bbox = group.getBoundingRect(); // Lấy bounding box của <g>
+
+            var centerX = bbox.left + bbox.width / 2;
+            var centerY = bbox.top + bbox.height / 2;
+            console.log(centerX, centerY)
+            group.set({
+                originX: 'center',
+                originY: 'center',
+                left: centerX,
+                top: centerY
+            });
+
+            var targetObject = group; // Thay đổi index nếu cần thiết
+
+            // Tạo hiệu ứng anime.js cho đối tượng SVG
+            var animation = anime({
+                targets: targetObject,
+                direction: 'alternate',
+                loop: true,
+                scaleY: {
+                    value: 0.1,
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                },
+
+            });
+            //Chỉnh ảnh xuống
+            document.getElementById('angle down').addEventListener('click', function () {
+                console.log(1);
+                animation.play();
+                console.log(group)
+                svgObject.animate('angle', '-=5', {
+                    onChange: canvas.renderAll.bind(canvas),
+                    duration: 1000,
+                    easing: fabric.util.ease.easeOutBounce,
+                });
+            })
+            //Chỉnh ảnh lên
+            document.getElementById('angle up').addEventListener('click', function () {
+
+                svgObject.animate('angle', '+=5', {
+                    onChange: canvas.renderAll.bind(canvas),
+                    duration: 1000,
+                    easing: fabric.util.ease.easeOutBounce,
+
+                });
+            })
+            //Chỉnh sang trái
+            document.getElementById('turn-left').addEventListener('click', function () {
+                svgObject.animate('left', '-=100', {
+                    onChange: canvas.renderAll.bind(canvas),
+                    duration: 1000,
+                    easing: fabric.util.ease.easeOutBounce,
+
+                });
+            })
+            //Chỉnh ảnh sang phải
+            document.getElementById('turn-right').addEventListener('click', function () {
+                svgObject.animate('left', '+=100', {
+                    onChange: canvas.renderAll.bind(canvas),
+                    duration: 1000,
+                    easing: fabric.util.ease.easeOutBounce,
+
+                });
+            })
+            animation.play();
+            // Thêm sự kiện click vào đối tượng SVG để kích hoạt hiệu ứng
+            svgObject.on('mousedown', function () {
+                console.log(1);
+                animation.play();
+                console.log(group)
+            });
+
+        });
+
+    </script>
+</body>
+
+</html>
