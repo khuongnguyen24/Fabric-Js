@@ -22,7 +22,7 @@
     var canvas = new fabric.Canvas('canvas');
     fabric.loadSVGFromURL('/default.svg', function (objects, options) {
       var svgObject = fabric.util.groupSVGElements(objects, options);
-      svgObject.scale(0.5);
+      // svgObject.scale(0.5);
       canvas.add(svgObject);
 
       var groupMat = svgObject.getObjects()[7];
