@@ -22,9 +22,9 @@
     var canvas = new fabric.Canvas('canvas');
     fabric.loadSVGFromURL('/default.svg', function (objects, options) {
       var svgObject = fabric.util.groupSVGElements(objects, options);
-      svgObject.scale(1.5);
+      // svgObject.scale(2);
       canvas.add(svgObject);
-      // console.log(svgObject.getObjects());
+      console.log(svgObject.getObjects());
 
       var groupEyes1 = svgObject.getObjects()[8];//long-trang
       var groupEyes2 = svgObject.getObjects()[9];//long-nau
@@ -34,17 +34,28 @@
       var groupEyes6 = svgObject.getObjects()[13];//quang-tham
       var groupEyes7 = svgObject.getObjects()[14];//bong-trang
       var groupEyes8 = svgObject.getObjects()[15];//long-may
+      var groupMouse1 = svgObject.getObjects()[38];//phan-nau-cua-moi
+
+      var bboxGroupMouse1 = groupMouse1.getBoundingRect();
+      var centerXgroupMouse1 = bboxGroupMouse1.left + bboxGroupMouse1.width / 2;
+      var centerYgroupMouse1 = bboxGroupMouse1.top + bboxGroupMouse1.height / 2;
+      groupMouse1.set({
+        originX: 'center',
+        originY: 'center',
+        left: centerXgroupMouse1,
+        top: centerYgroupMouse1
+      })
+
 
       var bboxGroupEyes1 = groupEyes1.getBoundingRect();
-      var centerX = bboxGroupEyes1.left + bboxGroupEyes1.width / 2;
-      var centerY = bboxGroupEyes1.top + bboxGroupEyes1.height / 2;
+      var centerXgroupEyes1 = bboxGroupEyes1.left + bboxGroupEyes1.width / 2;
+      var centerYgroupEyes1 = bboxGroupEyes1.top + bboxGroupEyes1.height / 2;
       groupEyes1.set({
         originX: 'center',
         originY: 'center',
-        left: centerX,
-        top: centerY
+        left: centerXgroupEyes1,
+        top: centerYgroupEyes1
       })
-
       var scaleY = 1; // Giá trị ban đầu của thuộc tính scaleY
       var direction = 1; // Hướng mặc định là 1 (xuôi)
       var isAnimating = false; // Trạng thái animation
@@ -64,6 +75,21 @@
         }
       }
 
+      function animateGroupMouse() {
+        var scaleYTarget = direction === 1 ? 0.09 : 1;
+        groupMouse1.animate('scaleY', scaleYTarget, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuart,
+          onComplete: function () {
+            direction *= -1;
+            if (isAnimating) {
+              animateGroupMouse();
+            }
+          }
+        });
+      }
+
       function animateGroupEyes() {
         var scaleYTarget = direction === 1 ? 0.09 : 1; // Xác định giá trị kết thúc của thuộc tính scaleY
         groupEyes1.animate('scaleY', scaleYTarget, {
@@ -81,6 +107,7 @@
       function stopAnimation() {
         isAnimating = false; // Đánh dấu animation đã dừng
       }
+      
     })
   </script>
 </body>
