@@ -26,36 +26,37 @@
       canvas.add(svgObject);
       // console.log(svgObject.getObjects());
 
-      var groupEyes1 = svgObject.getObjects()[17];
-      var groupEyes2 = svgObject.getObjects()[18];
-      var groupEyes3 = svgObject.getObjects()[19];
-      var groupEyes4 = svgObject.getObjects()[20];
-      var groupEyes5 = svgObject.getObjects()[21];
-      var groupEyes6 = svgObject.getObjects()[22];
-      var groupEyes7 = svgObject.getObjects()[23];
-      var groupEyes8 = svgObject.getObjects()[24];
+      var groupEyes1 = svgObject.getObjects()[8];//long-trang
+      var groupEyes2 = svgObject.getObjects()[9];//long-nau
+      var groupEyes3 = svgObject.getObjects()[10];//long-den
+      var groupEyes4 = svgObject.getObjects()[11];//vanh-sang
+      var groupEyes5 = svgObject.getObjects()[12];//long-mi
+      var groupEyes6 = svgObject.getObjects()[13];//quang-tham
+      var groupEyes7 = svgObject.getObjects()[14];//bong-trang
+      var groupEyes8 = svgObject.getObjects()[15];//long-may
 
       // Tạo một mảng chứa các đối tượng groupEyes
       var groupEyes = [groupEyes1, groupEyes2, groupEyes3, groupEyes4, groupEyes5, groupEyes6, groupEyes7, groupEyes8];
+      // console.log(groupEyes)
+      var bboxgroupEyes1 = groupEyes1.getBoundingRect();
+      // console.log(bboxgroupEyes1)
+      var centerX = bboxgroupEyes1.left + bboxgroupEyes1.width / 2;
+      var centerY = bboxgroupEyes1.top + bboxgroupEyes1.height / 2;
+      // console.log(centerX, centerY)
 
       // Tạo một hình hộp bao quanh (bounding box)
       var boundingBox = new fabric.Rect({
         left: groupEyes1.left, // Lấy thuộc tính left của groupEyes1
         top: groupEyes1.top, // Lấy thuộc tính top của groupEyes1
-        width: groupEyes8.left + groupEyes8.width - groupEyes1.left, // Tính toán chiều rộng của bounding box
-        height: groupEyes8.top + groupEyes8.height - groupEyes1.top // Tính toán chiều cao của bounding box
+        width: groupEyes5.width, // Tính toán chiều rộng của bounding box
+        height:  // Tính toán chiều cao của bounding box
       });
+      console.log(boundingBox)
 
-      // Gộp các đối tượng groupEyes thành một nhóm
-      var eyesGroup = new fabric.Group(groupEyes, {
-        left: boundingBox.left,
-        top: boundingBox.top
-      });
-
-      // Thêm bounding box vào canvas
-      canvas.add(boundingBox);
-
-      canvas.add(eyesGroup);
+      // var eyesGroup = new fabric.Group(groupEyes, {
+      //   left: boundingBox.left,
+      //   top: boundingBox.top
+      // });
     })
   </script>
 </body>
