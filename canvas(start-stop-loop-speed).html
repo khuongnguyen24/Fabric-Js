@@ -57,7 +57,8 @@
         top: centerYgroupEyes1
       })
       var scaleY = 1; // Giá trị ban đầu của thuộc tính scaleY
-      var direction = 1; // Hướng mặc định là 1 (xuôi)
+      var direction1 = 1; // Hướng mặc định là 1 (xuôi)
+      var direction2 = 1; // Hướng mặc định là 1 (xuôi)
       var isAnimating = false; // Trạng thái animation
 
       document.getElementById('start').addEventListener('click', function () {
@@ -72,17 +73,18 @@
         if (!isAnimating) {
           isAnimating = true; // Đánh dấu animation đang chạy
           animateGroupEyes();
+          animateGroupMouse();
         }
       }
 
       function animateGroupMouse() {
-        var scaleYTarget = direction === 1 ? 0.09 : 1;
+        var scaleYTarget = direction2 === 1 ? 0.09 : 1;
         groupMouse1.animate('scaleY', scaleYTarget, {
           onChange: canvas.renderAll.bind(canvas),
           duration: 1000,
           easing: fabric.util.ease.easeInOutQuart,
           onComplete: function () {
-            direction *= -1;
+            direction2 *= -1;
             if (isAnimating) {
               animateGroupMouse();
             }
@@ -91,13 +93,13 @@
       }
 
       function animateGroupEyes() {
-        var scaleYTarget = direction === 1 ? 0.09 : 1; // Xác định giá trị kết thúc của thuộc tính scaleY
+        var scaleYTarget = direction1 === 1 ? 0.09 : 1; // Xác định giá trị kết thúc của thuộc tính scaleY
         groupEyes1.animate('scaleY', scaleYTarget, {
           onChange: canvas.renderAll.bind(canvas),
           duration: 1000,
           easing: fabric.util.ease.easeInOutQuart,
           onComplete: function () {
-            direction *= -1; // Đảo ngược hướng animate
+            direction1 *= -1; // Đảo ngược hướng animate
             if (isAnimating) {
               animateGroupEyes(); // Gọi lại animateGroupEyes() để tạo vòng lặp
             }
@@ -107,7 +109,7 @@
       function stopAnimation() {
         isAnimating = false; // Đánh dấu animation đã dừng
       }
-      
+
     })
   </script>
 </body>
