@@ -51,12 +51,11 @@
         width: groupEyes5.width, // Tính toán chiều rộng của bounding box
         height: groupEyes8.height + groupEyes1.height + groupEyes6.height // Tính toán chiều cao của bounding box
       });
-      console.log(boundingBox)
 
-      // var eyesGroup = new fabric.Group(groupEyes, {
-      //   left: boundingBox.left,
-      //   top: boundingBox.top
-      // });
+      var eyesGroup = new fabric.Group(groupEyes, {
+        left: boundingBox.left,
+        top: boundingBox.top
+      });
     })
   </script>
 </body>
