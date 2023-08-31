@@ -100,8 +100,8 @@
       }
 
       function animateGroupMat() {
-        var scaleYTarget = direction3 === 1 ? 0.9 : 1;
-        groupMat.animate('scaleX', scaleYTarget, {
+        var scaleYTarget = direction3 === 1 ? 0.95 : 1;
+        groupMat.animate('scaleY', scaleYTarget, {
           onChange: canvas.renderAll.bind(canvas),
           duration: 1000,
           easing: fabric.util.ease.easeInOutQuart,
