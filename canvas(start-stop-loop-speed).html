@@ -24,7 +24,7 @@
       var svgObject = fabric.util.groupSVGElements(objects, options);
       // svgObject.scale(2);
       canvas.add(svgObject);
-      console.log(svgObject.getObjects());
+      // console.log(svgObject.getObjects());
 
       var groupMat = svgObject.getObjects()[7];//mặt
       var groupEyes1 = svgObject.getObjects()[8];//long-trang
@@ -43,9 +43,20 @@
       var groupEyes14 = svgObject.getObjects()[22];
       var groupEyes15 = svgObject.getObjects()[23];
       var groupEyes16 = svgObject.getObjects()[24];
+      var groupMui = svgObject.getObjects()[26];//mui
       var groupMouse1 = svgObject.getObjects()[38];//phan-nau-cua-moi
 
-      var groupMat = svgObject.getObjects()[7];
+      var bboxMui = groupMui.getBoundingRect();
+      var centerXmui = bboxMui.left + bboxMui.width / 2;
+      var centerYmui = bboxMui.top + bboxMui.height / 2;
+      groupMui.set({
+        originX: 'center',
+        originY: 'center',
+        left: centerXmui,
+        top: centerYmui
+      });
+
+
       var bboxMat = groupMat.getBoundingRect();
       var centerX = bboxMat.left + bboxMat.width / 2;
       var centerY = bboxMat.top + bboxMat.height / 2;
@@ -80,6 +91,7 @@
       var direction1 = 1; // Hướng mặc định là 1 (xuôi)
       var direction2 = 1;
       var direction3 = 1;
+      var direction4 = 1;
       var isAnimating = false; // Trạng thái animation
 
       document.getElementById('start').addEventListener('click', function () {
@@ -96,12 +108,28 @@
           animateGroupEyes();
           animateGroupMouse();
           animateGroupMat();
+          animateGroupMui();
         }
       }
 
+      function animateGroupMui() {
+        var scaleYTarget = direction4 === 1 ? 1.5 : 1;
+        groupMui.animate('scaleX', scaleYTarget, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuart,
+          onComplete: function () {
+            direction4 *= -1;
+            if (isAnimating) {
+              animateGroupMui();
+            }
+          }
+        });
+      }
+
       function animateGroupMat() {
-        var scaleYTarget = direction3 === 1 ? 0.95 : 1;
-        groupMat.animate('scaleY', scaleYTarget, {
+        var scaleYTarget = direction3 === 1 ? 0.9 : 1;
+        groupMat.animate('scaleX', scaleYTarget, {
           onChange: canvas.renderAll.bind(canvas),
           duration: 1000,
           easing: fabric.util.ease.easeInOutQuart,
