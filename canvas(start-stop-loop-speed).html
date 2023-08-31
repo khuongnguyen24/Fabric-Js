@@ -12,7 +12,7 @@
 <body>
   <div style="margin: 10px;" class="container d-flex justify-content-center">
     <button style="margin-right: 10px;" class="btn btn-secondary" id="start">Start</button>
-    <button style="margin-left: 10px;" class="btn btn-secondary" id="">Stop</button>
+    <button style="margin-left: 10px;" class="btn btn-secondary" id="stop">Stop</button>
     <button style="margin-left: 10px;" class="btn btn-secondary" id="">Speed</button>
     <button style="margin-left: 10px;" class="btn btn-secondary" id="">Slow</button>
   </div>
@@ -22,7 +22,7 @@
     var canvas = new fabric.Canvas('canvas');
     fabric.loadSVGFromURL('/default.svg', function (objects, options) {
       var svgObject = fabric.util.groupSVGElements(objects, options);
-      // svgObject.scale(0.5);
+      svgObject.scale(1.5);
       canvas.add(svgObject);
       // console.log(svgObject.getObjects());
 
@@ -35,27 +35,52 @@
       var groupEyes7 = svgObject.getObjects()[14];//bong-trang
       var groupEyes8 = svgObject.getObjects()[15];//long-may
 
-      // Tạo một mảng chứa các đối tượng groupEyes
-      var groupEyes = [groupEyes1, groupEyes2, groupEyes3, groupEyes4, groupEyes5, groupEyes6, groupEyes7, groupEyes8];
-      // console.log(groupEyes)
-      var bboxgroupEyes1 = groupEyes1.getBoundingRect();
-      // console.log(bboxgroupEyes1)
-      var centerX = bboxgroupEyes1.left + bboxgroupEyes1.width / 2;
-      var centerY = bboxgroupEyes1.top + bboxgroupEyes1.height / 2;
-      // console.log(centerX, centerY)
+      var bboxGroupEyes1 = groupEyes1.getBoundingRect();
+      var centerX = bboxGroupEyes1.left + bboxGroupEyes1.width / 2;
+      var centerY = bboxGroupEyes1.top + bboxGroupEyes1.height / 2;
+      groupEyes1.set({
+        originX: 'center',
+        originY: 'center',
+        left: centerX,
+        top: centerY
+      })
 
-      // Tạo một hình hộp bao quanh (bounding box)
-      var boundingBox = new fabric.Rect({
-        left: groupEyes1.left, // Lấy thuộc tính left của groupEyes1
-        top: groupEyes1.top, // Lấy thuộc tính top của groupEyes1
-        width: groupEyes5.width, // Tính toán chiều rộng của bounding box
-        height: groupEyes8.height + groupEyes1.height + groupEyes6.height // Tính toán chiều cao của bounding box
+      var scaleY = 1; // Giá trị ban đầu của thuộc tính scaleY
+      var direction = 1; // Hướng mặc định là 1 (xuôi)
+      var isAnimating = false; // Trạng thái animation
+
+      document.getElementById('start').addEventListener('click', function () {
+        startAnimation();
       });
 
-      var eyesGroup = new fabric.Group(groupEyes, {
-        left: boundingBox.left,
-        top: boundingBox.top
+      document.getElementById('stop').addEventListener('click', function () {
+        stopAnimation();
       });
+
+      function startAnimation() {
+        if (!isAnimating) {
+          isAnimating = true; // Đánh dấu animation đang chạy
+          animateGroupEyes();
+        }
+      }
+
+      function animateGroupEyes() {
+        var scaleYTarget = direction === 1 ? 0.09 : 1; // Xác định giá trị kết thúc của thuộc tính scaleY
+        groupEyes1.animate('scaleY', scaleYTarget, {
+          onChange: canvas.renderAll.bind(canvas),
+          duration: 1000,
+          easing: fabric.util.ease.easeInOutQuart,
+          onComplete: function () {
+            direction *= -1; // Đảo ngược hướng animate
+            if (isAnimating) {
+              animateGroupEyes(); // Gọi lại animateGroupEyes() để tạo vòng lặp
+            }
+          }
+        });
+      }
+      function stopAnimation() {
+        isAnimating = false; // Đánh dấu animation đã dừng
+      }
     })
   </script>
 </body>
